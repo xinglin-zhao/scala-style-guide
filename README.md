@@ -645,11 +645,11 @@ One notable exception is the use of a 2nd parameter list for implicits when defi
 
 __Do NOT use symbolic method names__, unless you are defining them for natural arithmetic operations (e.g. `+`, `-`, `*`, `/`). Under no other circumstances should they be used. Symbolic method names make it very hard to understand the intent of the methods. Consider the following two examples:
 ```scala
-// symbolic method names are hard to understand
+// Symbolic method names are hard to understand.
 channel ! msg
 stream1 >>= stream2
 
-// self-evident what is going on
+// Self-evident what is going on.
 channel.send(msg)
 stream1.join(stream2)
 ```
@@ -721,7 +721,7 @@ def max(data: Array[Int]): Int = {
   max0(data, 0, Int.MinValue)
 }
 
-// Explicit loop version
+// Explicit loop version.
 def max(data: Array[Int]): Int = {
   var max = Int.MinValue
   for (v <- data) {
@@ -771,9 +771,9 @@ __Avoid using symbol literals__. Symbol literals (e.g. `'column`) were deprecate
     ...
   } catch {
     case NonFatal(e) =>
-      // handle exception; note that NonFatal does not match InterruptedException
+      // Handle exception; note that NonFatal does not match InterruptedException.
     case e: InterruptedException =>
-      // handle InterruptedException
+      // Handle InterruptedException.
   }
   ```
   This ensures that we do not catch `NonLocalReturnControl` (as explained in [Return Statements](#return-statements)).
@@ -917,7 +917,7 @@ Note that for case 1 and case 2, do not let views or iterators of the collection
   // This is broken!
   def values: Iterable[String] = map.values
 
-  // Instead, copy the elements
+  // Instead, copy the elements.
   def values: Iterable[String] = map.synchronized { Seq(map.values: _*) }
   ```
 
@@ -929,14 +929,14 @@ Always prefer Atomic variables over `@volatile`. They have a strict superset of 
 
 Prefer Atomic variables over explicit synchronization when: (1) all critical updates for an object are confined to a *single* variable and contention is expected. Atomic variables are lock-free and permit more efficient contention. Or (2) synchronization is clearly expressed as a `getAndSet` operation. For example:
   ```scala
-  // good: clearly and efficiently express only-once execution of concurrent code
+  // Good: clearly and efficiently express only-once execution of concurrent code.
   val initialized = new AtomicBoolean(false)
   ...
   if (!initialized.getAndSet(true)) {
     ...
   }
 
-  // poor: less clear what is guarded by synchronization, may unnecessarily synchronize
+  // Poor: less clear what is guarded by synchronization, may unnecessarily synchronize.
   val initialized = false
   ...
   var wasInitialized = false
@@ -992,12 +992,12 @@ Use `while` loops instead of `for` loops or functional transformations (e.g. `ma
 ```scala
 
 val arr = // array of ints
-// zero out even positions
+// Zero out even positions.
 val newArr = list.zipWithIndex.map { case (elem, i) =>
   if (i % 2 == 0) 0 else elem
 }
 
-// This is a high performance version of the above
+// This is a high performance version of the above.
 val newArr = new Array[Int](arr.length)
 var i = 0
 val len = newArr.length
@@ -1032,8 +1032,8 @@ class MyClass {
   def perfSensitiveMethod(): Unit = {
     var i = 0
     while (i < 1000000) {
-      field1  // This might invoke a virtual method call
-      field2  // This is just a field access
+      field1  // This might invoke a virtual method call.
+      field2  // This is just a field access.
       i += 1
     }
   }
@@ -1063,12 +1063,12 @@ For interfaces that can be implemented externally, keep in mind the following:
 - Traits with default method implementations are not usable in Java. Use abstract classes instead.
 - In general, avoid using traits unless you know for sure the interface will not have any default implementation even in its future evolution.
 ```scala
-// The default implementation doesn't work in Java
+// The default implementation doesn't work in Java.
 trait Listener {
   def onTermination(): Unit = { ... }
 }
 
-// Works in Java
+// Works in Java.
 abstract class Listener {
   def onTermination(): Unit = { ... }
 }
@@ -1084,10 +1084,10 @@ Do NOT use type aliases. They are not visible in bytecode (and Java).
 
 Do NOT use default parameter values. Overload the method instead.
 ```scala
-// Breaks Java interoperability
+// Breaks Java interoperability.
 def sample(ratio: Double, withReplacement: Boolean = false): RDD[T] = { ... }
 
-// The following two work
+// The following two work.
 def sample(ratio: Double, withReplacement: Boolean): RDD[T] = { ... }
 def sample(ratio: Double): RDD[T] = sample(ratio, withReplacement = false)
 ```
@@ -1151,7 +1151,7 @@ There are a few things to watch out for when it comes to companion objects and s
   ```scala
   object Foo
 
-  // equivalent to the following Java code
+  // Equivalent to the following Java code.
   public class Foo$ {
     Foo$ MODULE$ = // instantiation of the object
   }
@@ -1201,12 +1201,12 @@ There are a few things to watch out for when it comes to companion objects and s
 When testing that performing a certain action (say, calling a function with an invalid argument) throws an exception, be as specific as possible about the type of exception you expect to be thrown. You should NOT simply `intercept[Exception]` or `intercept[Throwable]` (to use the ScalaTest syntax), as this will just assert that _any_ exception is thrown. Often times, this will just catch errors you made when setting up your testing mocks and your test will silently pass without actually checking the behavior you want to verify.
 
   ```scala
-  // This is WRONG
+  // This is WRONG.
   intercept[Exception] {
     thingThatThrowsException()
   }
 
-  // This is CORRECT
+  // This is CORRECT.
   intercept[MySpecificTypeOfException] {
     thingThatThrowsException()
   }
@@ -1240,18 +1240,18 @@ When there is an existing well-tesed method and it doesn't cause any performance
 
   ```scala
   val beginNs = System.nanoTime()
-  // Do something
+  // Do something.
   Thread.sleep(1000)
   val elapsedNs = System.nanoTime() - beginNs
 
-  // This is WRONG. It uses magic numbers and is pretty easy to make mistakes
+  // This is WRONG. It uses magic numbers and is pretty easy to make mistakes.
   val elapsedMs = elapsedNs / 1000 / 1000
 
-  // Use the Java TimeUnit API. This is CORRECT
+  // Use the Java TimeUnit API. This is CORRECT.
   import java.util.concurrent.TimeUnit
   val elapsedMs2 = TimeUnit.NANOSECONDS.toMillis(elapsedNs)
 
-  // Use the Scala Duration API. This is CORRECT
+  // Use the Scala Duration API. This is CORRECT.
   import scala.concurrent.duration._
   val elapsedMs3 = elapsedNs.nanos.toMillis
   ```
