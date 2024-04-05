@@ -182,24 +182,24 @@ In general:
 
 - Put one space after commas.
   ```scala
-  Seq("a", "b", "c") // do this
+  Seq("a", "b", "c") // Do this.
 
-  Seq("a","b","c") // don't omit spaces after commas
+  Seq("a","b","c") // Don't omit spaces after commas.
   ```
 
 - Put one space after colons.
   ```scala
-  // do this
+  // Do this.
   def getConf(key: String, defaultValue: String): String = {
     // some code
   }
 
-  // don't put spaces before colons
+  // Don't put spaces before colons.
   def calculateHeaderPortionInBytes(count: Int) : Int = {
     // some code
   }
 
-  // don't omit spaces after colons
+  // Don't omit spaces after colons.
   def multiply(int1:Int, int2:Int): Int = int1 * int2
   ```
 
@@ -265,12 +265,12 @@ In general:
 
 - Do NOT use vertical alignment. They draw attention to the wrong parts of the code and make the aligned code harder to change in the future.
   ```scala
-  // Don't align vertically
+  // Don't align vertically.
   val plus     = "+"
   val minus    = "-"
   val multiply = "*"
 
-  // Do the following
+  // Do the following.
   val plus = "+"
   val minus = "-"
   val multiply = "*"
@@ -311,7 +311,7 @@ In general:
     def foo: Foo
   }
 
-  new Bar().foo  // This returns a Foo
+  new Bar().foo  // This returns a Foo.
   new Bar().foo()  // This returns an Int!
   ```
 
@@ -350,15 +350,16 @@ try foo() catch {
 
 Suffix long literal values with uppercase `L`. It is often hard to differentiate lowercase `l` from `1`.
 ```scala
-val longValue = 5432L  // Do this
+val longValue = 5432L  // Do this.
 
-val longValue = 5432l  // Do NOT do this
+val longValue = 5432l  // Do NOT do this.
 ```
 
 
 ### <a name='doc'>Documentation Style</a>
 
-Use Java docs style instead of Scala docs style.
+Use Java docs style instead of Scala docs style. Each comment should be a complete sentence, starting with a capital letter and ending with punctuation.
+
 ```scala
 /** This is a correct one-liner, short description. */
 
@@ -372,6 +373,16 @@ Use Java docs style instead of Scala docs style.
   * is not correct.
   */
 ```
+
+For in class or function comments, use `//`:
+```scala
+/** This is the function description. */
+def foo() {
+  // This is the description of the logic.
+  println("Wow!")
+}
+```
+
 
 
 ### <a name='ordering_class'>Ordering within a Class</a>
